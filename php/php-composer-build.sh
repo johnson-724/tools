@@ -2,10 +2,10 @@
 
 path="$(pwd)"
 echo "starting composer install with docker ..."
-read -p "Do you want install on $path [Y/n]?" check
+read -p "Do you want install on $path [Y/n] ?" check
 
 if [ "$check" == "Y" ]; then
-    read -p "pick what php version did you want [7.4|8.1|8.2]" phpversion
+    read -p "pick what php version did you want [7.4|8.1|8.2]: " phpversion
     if [ "$phpversion" == "7.4" ]; then
         phpversion="74"
     elif [ "$phpversion" == "8.1" ]; then
@@ -17,11 +17,21 @@ if [ "$check" == "Y" ]; then
         exit 1
     fi
 
+    read -p "use default command (composer install --ignore-platform-reqs) or typing what you want: " command
+
+    if ["$command" == ""]; then
+        command="composer install --ignore-platform-reqs"
+        echo $command
+    else
+        echo $command
+    fi
+
     docker run --rm \
     -v "$(pwd):/var/www/html" \
     -w /var/www/html \
+    -it \
     laravelsail/php$phpversion-composer:latest \
-	composer install --ignore-platform-reqs
+	bash -c "$command" </dev/tty
 else
     echo "Done! nothing to do."
 fi
