@@ -20,6 +20,7 @@ if [ "$check" == "Y" ]; then
     read -p "input the project name did you want : " projectName
 
     docker run --rm \
+    -it --user 1000:1000 \
     -v "$(pwd):/var/www/html" \
     -w /var/www/html \
     laravelsail/php$phpversion-composer:latest \

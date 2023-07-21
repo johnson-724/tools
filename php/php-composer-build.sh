@@ -27,9 +27,9 @@ if [ "$check" == "Y" ]; then
     fi
 
     docker run --rm \
+    -it --user 1000:1000 \
     -v "$(pwd):/var/www/html" \
     -w /var/www/html \
-    -it \
     laravelsail/php$phpversion-composer:latest \
 	bash -c "$command" </dev/tty
 else
